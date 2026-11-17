@@ -1,0 +1,30 @@
+./.verify-env/Scripts/python.exe : test_c_parity (test_reference.Features.test_c_parity) ... ok
+At line:2 char:127
++ ... .dll).Path; ./.verify-env/Scripts/python.exe -m unittest discover -s  ...
++                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (test_c_parity (..._parity) ... ok:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+test_quantization (test_reference.Features.test_quantization) ... ok
+test_shape_and_silence (test_reference.Features.test_shape_and_silence) ... ok
+test_nan_and_ambiguity (test_reference.Policy.test_nan_and_ambiguity) ... ok
+test_reject_resets_and_timeout (test_reference.Policy.test_reject_resets_and_timeout) ... ok
+test_wake_command_cooldown (test_reference.Policy.test_wake_command_cooldown) ... ok
+test_api_schema_auth (test_reference.Service.test_api_schema_auth) ... C:\Users\trann\.t3\scratch\2026-11-13-esp32-voic
+e-edge-hardware-progress-82d229dc\.verify-env\Lib\site-packages\fastapi\testclient.py:1: StarletteDeprecationWarning: 
+Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+  from starlette.testclient import TestClient as TestClient  # noqa
+ok
+test_duplicate_and_conflict (test_reference.Service.test_duplicate_and_conflict) ... ok
+test_no_replay_after_uncertain_delivery (test_reference.Service.test_no_replay_after_uncertain_delivery) ... ok
+test_persistent_dedup (test_reference.Service.test_persistent_dedup) ... ok
+test_rejections (test_reference.Service.test_rejections) ... ok
+
+----------------------------------------------------------------------
+Ran 11 tests in 2.242s
+
+OK
+parity signal=0 max_abs_error=0.00002241
+parity signal=1 max_abs_error=0.00000441
+parity signal=2 max_abs_error=0.00002098
+parity signal=3 max_abs_error=0.00003052

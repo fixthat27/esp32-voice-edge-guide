@@ -1,0 +1,11 @@
+__pycache__/
+*.pyc
+.venv/
+build/
+managed_components/
+sdkconfig
+*.sqlite3
+ml/data/
+firmware/main/model_data.cc
+firmware/main/model_metadata.h
+firmware/main/golden_input.h

@@ -1,0 +1,7 @@
+set(srcs "app_main.cpp" "../shared/mfcc.c")
+set(deps esp_driver_i2s esp_timer)
+if(CONFIG_VOICE_INFERENCE)
+    list(APPEND srcs "inference.cpp" "model_data.cc")
+    list(APPEND deps esp-tflite-micro)
+endif()
+idf_component_register(SRCS ${srcs} INCLUDE_DIRS "." "../shared" REQUIRES ${deps})

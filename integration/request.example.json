@@ -1,0 +1,10 @@
+{
+  "request_id": "esp32s3-01-boot7-00001234",
+  "source": "esp32_tinyml",
+  "device_id": "technical-office-light",
+  "intent": "device_control",
+  "action": "turn_on",
+  "value": true,
+  "confidence": 0.94,
+  "model_version": "command-cnn-v1"
+}

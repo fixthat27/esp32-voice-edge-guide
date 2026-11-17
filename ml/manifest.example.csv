@@ -1,0 +1,4 @@
+path,label,speaker,session,group,split
+raw/s01_day1/light_on_001.wav,light_on,s01,day1,s01_day1,train
+raw/s01_day2/light_on_001.wav,light_on,s01,day2,s01_day2,val
+raw/s02_day3/light_on_001.wav,light_on,s02,day3,s02_day3,test

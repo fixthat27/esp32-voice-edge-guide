@@ -1,0 +1,7 @@
+menu "Voice reference"
+config VOICE_INFERENCE
+    bool "Enable trained model inference instead of capture"
+    default n
+    help
+        First run ML export and add the pinned TFLite Micro dependency.
+endmenu

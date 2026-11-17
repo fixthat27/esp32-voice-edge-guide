@@ -1,0 +1,6 @@
+# Proposed reproducible training environment: Python 3.11. Validate converter locally.
+tensorflow==2.16.1
+keras==3.3.3
+numpy==1.26.4
+scipy==1.13.1
+pyserial==3.5

@@ -1,0 +1,220 @@
+{
+  "format": 1,
+  "files": [
+    {
+      "path": ".gitignore",
+      "bytes": 170,
+      "sha256": "846f6a22dc6e48db89c38048cd840618d3a467cb3ec50b35e460fb4e5df42ca7"
+    },
+    {
+      "path": "docs/EXPERIMENT_LOG.md",
+      "bytes": 1009,
+      "sha256": "9f5050ecf7083fe63de790d77125e5267a7c7d6fd15deee253420a04f1e64513"
+    },
+    {
+      "path": "docs/host_environment.txt",
+      "bytes": 327,
+      "sha256": "54de596f0ace56891ee35d610f7304464d322ffe92d4ae9b85bccf16235b39ee"
+    },
+    {
+      "path": "docs/host_tests.txt",
+      "bytes": 1858,
+      "sha256": "7b64ea88c7e38318d87acf526b47334f66624e501216c0e2951d82b3213cd2e1"
+    },
+    {
+      "path": "docs/INTEGRATION.md",
+      "bytes": 11784,
+      "sha256": "14de93ea460993d9483e1039802cf45c1e89d7752b3db2658a86abeaaaabab5a"
+    },
+    {
+      "path": "docs/REFERENCES.md",
+      "bytes": 7396,
+      "sha256": "0a054c45e843f3ad0be954693202a0ca51d9358c5431eed985ef3b0fa28fef39"
+    },
+    {
+      "path": "docs/THEORY.md",
+      "bytes": 10234,
+      "sha256": "b27c27e4c05ff68c5f1e34673717dec596a46ab2b03b2e94288ba8b194841287"
+    },
+    {
+      "path": "docs/TROUBLESHOOTING.md",
+      "bytes": 3444,
+      "sha256": "fa164df0d61ec55a426cca291b4418b795287ac715490b009cb149cee0330e01"
+    },
+    {
+      "path": "docs/VALIDATION.md",
+      "bytes": 4468,
+      "sha256": "40ec474fc273c5fdfa093a14057a5ceacd3438fcd74931199f51359a47b6a7a5"
+    },
+    {
+      "path": "docs/WORKFLOW.md",
+      "bytes": 18171,
+      "sha256": "ee2257990e9a91bb5cc5f337903c1bca0854e941990905e0e6877b88393c374b"
+    },
+    {
+      "path": "firmware/CMakeLists.txt",
+      "bytes": 123,
+      "sha256": "9e0caeb2626cf696ca832ee025263088ce3f111dc6b5bf646173532db7c4562a"
+    },
+    {
+      "path": "firmware/main/app_main.cpp",
+      "bytes": 2613,
+      "sha256": "e6287c1270745f3a8c935c8d30f5e9323772d22ce3d921587a728f20f0d7c344"
+    },
+    {
+      "path": "firmware/main/board_config.h",
+      "bytes": 249,
+      "sha256": "8772b611d60a54d530b403b994cd2c1935990cd60d5073f2128ab13f4040e732"
+    },
+    {
+      "path": "firmware/main/CMakeLists.txt",
+      "bytes": 290,
+      "sha256": "8b8b439b703c543a88026d2dd4af5d458914f34df8025cae32b843b523a962ad"
+    },
+    {
+      "path": "firmware/main/inference.cpp",
+      "bytes": 2727,
+      "sha256": "46d1fb68e5deaf6ba7dc510b28e580d54d13d1cbc1b31d62ee71e05bd9f983ef"
+    },
+    {
+      "path": "firmware/main/Kconfig.projbuild",
+      "bytes": 210,
+      "sha256": "461ca35aef770f8d2637e7a4b26f54e7cb4e99edbbacbddf5785349e5b0982da"
+    },
+    {
+      "path": "firmware/shared/mfcc.c",
+      "bytes": 2253,
+      "sha256": "cbd6ce26523406540b7cecd12074a11186e9f3d7495b8e79ece0a6f5f6a30c10"
+    },
+    {
+      "path": "firmware/shared/mfcc.h",
+      "bytes": 266,
+      "sha256": "670bd29370ad755bb08c7619cd7f4b816ac5f43fb87649826d16414e61117fef"
+    },
+    {
+      "path": "integration/api.py",
+      "bytes": 1257,
+      "sha256": "d4c53f49b8198797fab4f4a46fe1df246f40d116f5685a665830a64bf2306a0d"
+    },
+    {
+      "path": "integration/esp32_http_transport.c",
+      "bytes": 5041,
+      "sha256": "304e13245728d43dd33bb2d4b9b611f1487b38a457da723ad12c7c73871c1249"
+    },
+    {
+      "path": "integration/esp32_http_transport.h",
+      "bytes": 736,
+      "sha256": "0f4fb663d46e6bace23eb571098c525ac00ecf0d646663b592ff8db159c55571"
+    },
+    {
+      "path": "integration/policy.py",
+      "bytes": 1485,
+      "sha256": "dc8ac8b0348b3be0c2693b78e7203e302cf112ae0e83d0f199f7e88f5a8294a8"
+    },
+    {
+      "path": "integration/request.example.json",
+      "bytes": 246,
+      "sha256": "05dd6f34896f47d913c4742432fec461f448953979ad4d84e7994038bf2a2083"
+    },
+    {
+      "path": "integration/requirements.txt",
+      "bytes": 67,
+      "sha256": "31868545121425b5fd1356cf9c6d0044b91a243f8eab62e59f3fb8fab0687ef3"
+    },
+    {
+      "path": "integration/service.py",
+      "bytes": 2274,
+      "sha256": "6c9050f5e24405f7cc7275b4ae8ad2b90c600b442dd2970b8e87f90e969be33a"
+    },
+    {
+      "path": "ml/labels.json",
+      "bytes": 73,
+      "sha256": "cc2802bcf7e611dd8d0d0b6a4d179615ff51e48ec7a151ac468f1a32b9465ece"
+    },
+    {
+      "path": "ml/manifest.example.csv",
+      "bytes": 225,
+      "sha256": "20864984f57007c94420e7a630a2245c3091c8da91689159304936b13314fabb"
+    },
+    {
+      "path": "ml/requirements.txt",
+      "bytes": 161,
+      "sha256": "bd22ed68efbbf01d5ebec2395b2796cf8c1e9064f1fadabdcc98bdf3dbc27944"
+    },
+    {
+      "path": "ml/src/features.py",
+      "bytes": 1312,
+      "sha256": "1bd5319186a2b83600e1ce8c23df79bea604f58ec152cd0a6332ce076714e351"
+    },
+    {
+      "path": "ml/src/pipeline.py",
+      "bytes": 9711,
+      "sha256": "d3a109a449391f501a39e9a473fedce6c3398eb93336ce86e41c4aeebaea86cd"
+    },
+    {
+      "path": "originals/hardware_progress.md",
+      "bytes": 40476,
+      "sha256": "5c924adaf16635409106d6bd830a4256e0dc469b47d43d28d6410ff01599be58"
+    },
+    {
+      "path": "originals/smarthome_proposal.md",
+      "bytes": 79929,
+      "sha256": "09d63384fcbb1b0a70622bd93c4e2b54078c1335eefbb1d09f5e679c1f023c01"
+    },
+    {
+      "path": "README.md",
+      "bytes": 4470,
+      "sha256": "e4924e00b22424d56e7def12c4913d4ab82eb5868bb98b05825af9bc72e40c05"
+    },
+    {
+      "path": "test/inference_vectors/README.md",
+      "bytes": 429,
+      "sha256": "d08ee572db62a53d8b4c4604fffa467a535be2d8e94846e46e13e680946f5a3f"
+    },
+    {
+      "path": "test/inference_vectors/synthetic_chirp.wav",
+      "bytes": 32044,
+      "sha256": "5bca7df26d42e79cc3ed2af8456a4f49e362fb025909f8181f44f29eae364102"
+    },
+    {
+      "path": "test/inference_vectors/synthetic_chirp_mfcc.npy",
+      "bytes": 5224,
+      "sha256": "62c0c12f259d3281d93704093322cd8dbfc82dda676be54299fed0e40f9a29cd"
+    },
+    {
+      "path": "test/test_reference.py",
+      "bytes": 4814,
+      "sha256": "4919c1f64826e7bb1c768076f38d3f9d790a69a3d3ed54bd9ff1566e6c17b4cc"
+    },
+    {
+      "path": "tools/capture_serial.py",
+      "bytes": 1775,
+      "sha256": "b2608ef3e9fb1a936b6c798fa9d501dcd600046d3a6f33160b7e3b42f085b82d"
+    },
+    {
+      "path": "tools/check_manifest.py",
+      "bytes": 547,
+      "sha256": "d6c814f5d215ef860675800bc5a20e44ca80dba062301f44f384bc20af962e25"
+    },
+    {
+      "path": "tools/inspect_wav.py",
+      "bytes": 552,
+      "sha256": "ee885d8782ec50624bc854667dc737875400bc9c28f21a8d16d299fbba09bed7"
+    },
+    {
+      "path": "tools/make_dsp_vector.py",
+      "bytes": 1127,
+      "sha256": "708c4ae1e3953a275955a5fb9fc8b4aa0a6c155bd8284b63ac19afdb557c8092"
+    },
+    {
+      "path": "tools/smoke_dataset.py",
+      "bytes": 1136,
+      "sha256": "e2e3a1cfb8372830b8900e05474c3f83cfa11e23c142c15e1519f081306093ef"
+    },
+    {
+      "path": "tools/test_host.ps1",
+      "bytes": 432,
+      "sha256": "4802c8db05363cb79f30bafde829783b2b4a13e9c94251c52428f93780ddc181"
+    }
+  ]
+}
