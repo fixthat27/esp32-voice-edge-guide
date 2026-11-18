@@ -1,6 +1,6 @@
 {
   "sample_rate": 16000,
-  "samples": 16000,
+  "samples": 32000,
   "window": 400,
   "hop": 160,
   "fft": 512,

@@ -12,7 +12,7 @@
  *   FEATURE_N = FRAMES * MFCC
  */
 #define AUDIO_SAMPLE_RATE 16000
-#define AUDIO_SAMPLES     16000
+#define AUDIO_SAMPLES     32000
 #define AUDIO_WINDOW      400
 #define AUDIO_HOP         160
 #define AUDIO_FFT         512
