@@ -2,13 +2,16 @@
 import argparse, csv, hashlib, json, wave
 from pathlib import Path
 import numpy as np
+from config import config
 from features import mfcc, quantize
+
 
 def read_wav(path):
     with wave.open(str(path),'rb') as w:
-        if (w.getnchannels(),w.getsampwidth(),w.getframerate(),w.getnframes())!=(1,2,16000,16000):
-            raise ValueError(f'{path}: need 1-second, mono PCM16, 16000 Hz')
-        return np.frombuffer(w.readframes(16000),dtype='<i2').astype(np.int16)
+        if (w.getnchannels(),w.getsampwidth(),w.getframerate(),w.getnframes())!=(1,2,config.sample_rate,config.samples):
+            raise ValueError(f'{path}: need {config.samples}-sample, mono PCM16, {config.sample_rate} Hz')
+        return np.frombuffer(w.readframes(config.samples),dtype='<i2').astype(np.int16)
+
 
 def prepare(args):
     manifest=Path(args.manifest)
@@ -37,16 +40,16 @@ def prepare(args):
     for split,items in data.items():
         x=np.stack([x for x,_ in items]); y=np.array([y for _,y in items])
         np.savez_compressed(out/f'{split}.npz',x=((x-mean)/std)[...,None],y=y)
-    config={'sample_rate':16000,'samples':16000,'window':400,'hop':160,'fft':512,
-            'frames':98,'mel_bins':40,'mfcc':13,'fmin':20,'fmax':7600,
-            'window_type':'periodic_hann','mel':'HTK_unscaled_triangles',
-            'power':'abs_rfft_squared_div_512','log':'natural_floor_1e-10',
-            'dct':'II_ortho_include_c0','padding':'none','preemphasis':False,
+    config_meta={'sample_rate':config.sample_rate,'samples':config.samples,'window':config.window,'hop':config.hop,'fft':config.fft,
+            'frames':config.frames,'mel_bins':config.mel_bins,'mfcc':config.mfcc,'fmin':config.fmin,'fmax':config.fmax,
+            'window_type':config.window_type,'mel':config.mel,'power':config.power,'log':config.log,
+            'dct':config.dct,'padding':config.padding,'preemphasis':config.preemphasis,
             'labels':labels,'mean':mean.tolist(),'std':std.tolist(),
             'manifest_sha256':hashlib.sha256(manifest.read_bytes()).hexdigest(),
             'audio_sha256':sorted(hashes)}
-    (out/'metadata.json').write_text(json.dumps(config,indent=2))
+    (out/'metadata.json').write_text(json.dumps(config_meta,indent=2))
     print({s:len(v) for s,v in data.items()})
+
 
 def train(args):
     import tensorflow as tf
@@ -54,7 +57,7 @@ def train(args):
     root=Path(args.data); a=np.load(root/'train.npz'); v=np.load(root/'val.npz')
     meta=json.loads((root/'metadata.json').read_text())
     model=tf.keras.Sequential([
-        tf.keras.layers.Input((98,13,1)),
+        tf.keras.layers.Input((config.frames,config.mfcc,1)),
         tf.keras.layers.Conv2D(8,3,padding='same',activation='relu'),
         tf.keras.layers.MaxPooling2D(2),
         tf.keras.layers.Conv2D(16,3,padding='same',activation='relu'),
@@ -65,6 +68,7 @@ def train(args):
     model.fit(a['x'],a['y'],validation_data=(v['x'],v['y']),epochs=args.epochs,batch_size=32,
               callbacks=[tf.keras.callbacks.EarlyStopping(patience=8,restore_best_weights=True)])
     model.save(root/'command.keras')
+
 
 def export(args):
     import tensorflow as tf
@@ -87,7 +91,7 @@ def export(args):
     blob=converter.convert(); (root/'command.tflite').write_bytes(blob)
     engine=tf.lite.Interpreter(model_content=blob); engine.allocate_tensors()
     inp=engine.get_input_details()[0]; out=engine.get_output_details()[0]
-    if inp['dtype']!=np.int8 or out['dtype']!=np.int8 or list(inp['shape'])!=[1,98,13,1]:
+    if inp['dtype']!=np.int8 or out['dtype']!=np.int8 or list(inp['shape'])!=[1,config.frames,config.mfcc,1]:
         raise ValueError('Unexpected model I/O')
     meta['input_quantization']=list(inp['quantization'])
     meta['output_quantization']=list(out['quantization'])
@@ -112,6 +116,7 @@ def export(args):
         ','.join(str(int(x)) for x in q.ravel())+'};\n'+
         'static const signed char GOLDEN_OUTPUT[] = {'+
         ','.join(str(int(x)) for x in engine.get_tensor(out['index']).ravel())+'};\n')
+
 
 def evaluate(args):
     import tensorflow as tf
@@ -141,6 +146,7 @@ def evaluate(args):
             'positive_clips':int((~negatives).sum()),
             'missed_or_wrong_positive_clips':int(((~accepted|(pred!=truth))&~negatives).sum())}
     (root/f'report_{args.split}.json').write_text(json.dumps(report,indent=2)); print(json.dumps(report,indent=2))
+
 
 p=argparse.ArgumentParser(); sub=p.add_subparsers(dest='cmd',required=True)
 a=sub.add_parser('prepare'); a.add_argument('--manifest',required=True); a.add_argument('--labels',default='ml/labels.json'); a.add_argument('--out',default='ml/data/processed'); a.set_defaults(run=prepare)

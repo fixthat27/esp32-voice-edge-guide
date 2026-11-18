@@ -13,8 +13,8 @@
 extern bool inference_init();
 extern void inference_run(const float *features);
 #endif
-static int16_t pcm[AUDIO_N];
-static float features[FEATURE_N];
+static int16_t pcm[AUDIO_SAMPLES];
+static float features[AUDIO_FEATURE_N];
 static int32_t stereo[AUDIO_READ_FRAMES*2];
 extern "C" void app_main(void) {
     i2s_chan_handle_t rx;
@@ -45,10 +45,10 @@ extern "C" void app_main(void) {
         size_t got;
         for(int i=0;i<4;i++) ESP_ERROR_CHECK(i2s_channel_read(rx,stereo,sizeof(stereo),&got,1000));
         size_t n=0;
-        while(n<AUDIO_N) {
+        while(n<AUDIO_SAMPLES) {
             ESP_ERROR_CHECK(i2s_channel_read(rx,stereo,sizeof(stereo),&got,1000));
             if(got%8 || got==0) {ESP_ERROR_CHECK(ESP_FAIL);}
-            for(size_t j=0;j<got/8 && n<AUDIO_N;j++)
+            for(size_t j=0;j<got/8 && n<AUDIO_SAMPLES;j++)
                 pcm[n++]=(int16_t)(stereo[j*2]>>16);
         }
 
@@ -62,8 +62,8 @@ extern "C" void app_main(void) {
         inference_run(features);
 #else
         // Dump only after capture, so a slow serial link cannot lose I2S samples.
-        printf("PCM_BEGIN %u 16000\n",clip);
-        for(int i=0;i<AUDIO_N;i+=32) {
+        printf("PCM_BEGIN %u %u\n",clip,AUDIO_SAMPLES);
+        for(int i=0;i<AUDIO_SAMPLES;i+=32) {
             printf("PCM %05d ",i);
             for(int j=0;j<32;j++) printf("%04x",(unsigned)(uint16_t)pcm[i+j]);
             printf("\n");
