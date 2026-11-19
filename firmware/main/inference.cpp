@@ -23,11 +23,11 @@ bool inference_init() {
     if(engine->AllocateTensors()!=kTfLiteOk) return false;
     auto *in=engine->input(0), *out=engine->output(0);
     if(in->type!=kTfLiteInt8 || out->type!=kTfLiteInt8 ||
-       in->bytes!=FEATURE_N || out->bytes!=LABEL_COUNT ||
-       in->dims->size!=4 || in->dims->data[1]!=98 || in->dims->data[2]!=13 ||
+       in->bytes!=AUDIO_FEATURE_N || out->bytes!=LABEL_COUNT ||
+       in->dims->size!=4 || in->dims->data[1]!=AUDIO_FRAMES || in->dims->data[2]!=AUDIO_MFCC ||
        in->params.scale<=0 || out->params.scale<=0) return false;
     printf("arena_used=%u\n",(unsigned)engine->arena_used_bytes());
-    memcpy(in->data.int8,GOLDEN_INPUT,FEATURE_N);
+    memcpy(in->data.int8,GOLDEN_INPUT,AUDIO_FEATURE_N);
     if(engine->Invoke()!=kTfLiteOk) return false;
     int mismatches=0;
     for(int i=0;i<LABEL_COUNT;i++) {
@@ -39,8 +39,8 @@ bool inference_init() {
 }
 void inference_run(const float *features) {
     auto *in=engine->input(0);
-    for(int i=0;i<FEATURE_N;i++) {
-        float x=(features[i]-FEATURE_MEAN[i%13])/FEATURE_STD[i%13];
+    for(int i=0;i<AUDIO_FEATURE_N;i++) {
+        float x=(features[i]-FEATURE_MEAN[i%AUDIO_MFCC])/FEATURE_STD[i%AUDIO_MFCC];
         int q=(int)roundf(x/in->params.scale)+in->params.zero_point;
         in->data.int8[i]=(int8_t)(q<-128?-128:(q>127?127:q));
     }

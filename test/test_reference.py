@@ -3,14 +3,15 @@ from pathlib import Path
 import numpy as np
 ROOT=Path(__file__).resolve().parents[1]
 sys.path[:0]=[str(ROOT),str(ROOT/'ml/src')]
+from config import config
 from features import mfcc, quantize
 from integration.policy import VoicePolicy
 from integration.service import CommandService, Conflict, Rejected
 
 class Features(unittest.TestCase):
     def test_shape_and_silence(self):
-        a=mfcc(np.zeros(16000,np.int16))
-        self.assertEqual(a.shape,(98,13)); self.assertTrue(np.isfinite(a).all())
+        a=mfcc(np.zeros(config.samples,np.int16))
+        self.assertEqual(a.shape,(config.frames,config.mfcc)); self.assertTrue(np.isfinite(a).all())
         np.testing.assert_allclose(a[:,1:],0,atol=1e-10)
     def test_quantization(self):
         np.testing.assert_array_equal(quantize(np.array([-999,-.5,.5,999]),1,0),[-128,-1,1,127])
@@ -19,12 +20,12 @@ class Features(unittest.TestCase):
         lib=ctypes.CDLL(os.environ['MFCC_LIB']); fn=lib.mfcc_compute
         fn.argtypes=[ctypes.POINTER(ctypes.c_int16),ctypes.POINTER(ctypes.c_float)]
         rng=np.random.default_rng(17)
-        t=np.arange(16000)/16000
-        signals=[np.zeros(16000,np.int16),rng.integers(-30000,30000,16000,dtype=np.int16),
+        t=np.arange(config.samples)/config.sample_rate
+        signals=[np.zeros(config.samples,np.int16),rng.integers(-30000,30000,config.samples,dtype=np.int16),
                  (12000*np.sin(2*np.pi*440*t)).astype(np.int16),
-                 (100*np.sin(2*np.pi*997*t)+rng.normal(0,4,16000)).astype(np.int16)]
+                 (100*np.sin(2*np.pi*997*t)+rng.normal(0,4,config.samples)).astype(np.int16)]
         for i,x in enumerate(signals):
-            out=np.empty((98,13),np.float32)
+            out=np.empty((config.frames,config.mfcc),np.float32)
             fn(x.ctypes.data_as(ctypes.POINTER(ctypes.c_int16)),out.ctypes.data_as(ctypes.POINTER(ctypes.c_float)))
             error=float(np.max(np.abs(out-mfcc(x))))
             print(f'parity signal={i} max_abs_error={error:.8f}')

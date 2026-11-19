@@ -15,7 +15,7 @@ with serial.Serial(a.port,a.baud,timeout=2) as port:
         if line.startswith('READY'): print(line,flush=True)
         if line.startswith('PCM_BEGIN '):
             _,clip,count=line.split()
-            if count!='16000': raise ValueError('Wrong sample count')
+            if count!='32000': raise ValueError('Wrong sample count')
             samples=[]
         elif line.startswith('PCM ') and clip is not None:
             _,offset,data=line.split()
@@ -24,7 +24,7 @@ with serial.Serial(a.port,a.baud,timeout=2) as port:
             words=[int(data[i:i+4],16) for i in range(0,len(data),4)]
             samples.extend(x if x<32768 else x-65536 for x in words)
         elif line==f'PCM_END {clip}' and clip is not None:
-            if len(samples)!=16000: raise ValueError('Incomplete capture')
+            if len(samples)!=32000: raise ValueError('Incomplete capture')
             dest.parent.mkdir(parents=True,exist_ok=True)
             raw=array.array('h',samples)
             if sys.byteorder!='little': raw.byteswap()

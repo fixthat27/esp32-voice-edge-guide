@@ -1,0 +1,20 @@
+{
+  "sample_rate": 16000,
+  "samples": 32000,
+  "window": 400,
+  "hop": 160,
+  "fft": 512,
+  "mel_bins": 64,
+  "mfcc": 20,
+  "fmin": 20,
+  "fmax": 7600,
+  "log_floor": 0.0000000001,
+  "window_type": "periodic_hann",
+  "mel": "HTK_unscaled_triangles",
+  "power": "abs_rfft_squared_div_512",
+  "log": "natural_floor_1e-10",
+  "dct": "II_ortho_include_c0",
+  "padding": "none",
+  "preemphasis": false,
+  "labels": ["light_on", "light_off", "music_on", "music_off", "unknown", "silence"]
+}
