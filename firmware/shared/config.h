@@ -16,8 +16,8 @@
 #define AUDIO_WINDOW      400
 #define AUDIO_HOP         160
 #define AUDIO_FFT         512
-#define AUDIO_MEL_BINS    40
-#define AUDIO_MFCC        13
+#define AUDIO_MEL_BINS    64
+#define AUDIO_MFCC        20
 #define AUDIO_FMIN        20
 #define AUDIO_FMAX        7600
 

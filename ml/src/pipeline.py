@@ -51,22 +51,40 @@ def prepare(args):
     print({s:len(v) for s,v in data.items()})
 
 
+def augment(x, rng):
+    """Add noise, random gain, and time shift."""
+    x = x + rng.normal(0, 0.01, x.shape)
+    x = x * rng.uniform(0.8, 1.2)
+    shift = rng.integers(-5, 6)
+    if shift != 0:
+        x = np.roll(x, shift, axis=0)
+    return x
+
+
 def train(args):
     import tensorflow as tf
     tf.keras.utils.set_random_seed(2026)
     root=Path(args.data); a=np.load(root/'train.npz'); v=np.load(root/'val.npz')
     meta=json.loads((root/'metadata.json').read_text())
+    rng=np.random.default_rng(2026)
+    # Augment training data
+    x_train = np.stack([augment(x, rng) for x in a['x']])
     model=tf.keras.Sequential([
         tf.keras.layers.Input((config.frames,config.mfcc,1)),
-        tf.keras.layers.Conv2D(8,3,padding='same',activation='relu'),
-        tf.keras.layers.MaxPooling2D(2),
         tf.keras.layers.Conv2D(16,3,padding='same',activation='relu'),
+        tf.keras.layers.MaxPooling2D(2),
+        tf.keras.layers.Conv2D(32,3,padding='same',activation='relu'),
+        tf.keras.layers.Conv2D(64,3,padding='same',activation='relu'),
         tf.keras.layers.GlobalAveragePooling2D(),
         tf.keras.layers.Dense(len(meta['labels']),activation='softmax')])
     model.compile(optimizer='adam',loss='sparse_categorical_crossentropy',metrics=['accuracy'])
+    # Compute class weights
+    class_weight = {i: 1.0 / np.sum(a['y'] == i) for i in range(len(meta['labels']))}
     model.summary()
-    model.fit(a['x'],a['y'],validation_data=(v['x'],v['y']),epochs=args.epochs,batch_size=32,
-              callbacks=[tf.keras.callbacks.EarlyStopping(patience=8,restore_best_weights=True)])
+    model.fit(x_train,a['y'],validation_data=(v['x'],v['y']),epochs=args.epochs,batch_size=32,
+              callbacks=[tf.keras.callbacks.EarlyStopping(patience=20,restore_best_weights=True),
+                         tf.keras.callbacks.ReduceLROnPlateau(factor=0.5,patience=5)],
+              class_weight=class_weight)
     model.save(root/'command.keras')
 
 
