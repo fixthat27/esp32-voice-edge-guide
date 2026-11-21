@@ -10,5 +10,5 @@ for wav_path in sorted(raw_dir.glob("*.wav")):
         input_path=str(wav_path),
         output_dir=str(output_dir),
         noise_path=None,
-        count=5
+        count=20
     )

@@ -1,5 +1,5 @@
 set(srcs "app_main.cpp" "../shared/mfcc.c")
-set(deps esp_driver_i2s esp_timer)
+set(deps esp_driver_i2s esp_timer heap)
 if(CONFIG_VOICE_INFERENCE)
     list(APPEND srcs "inference.cpp" "model_data.cc")
     list(APPEND deps esp-tflite-micro)

@@ -1,16 +1,23 @@
 #include <cstdio>
 #include <cmath>
 #include <cstring>
+#include <cstdint>
 #include "esp_timer.h"
+#include "esp_heap_caps.h"
 #include "tensorflow/lite/micro/micro_interpreter.h"
 #include "tensorflow/lite/micro/micro_mutable_op_resolver.h"
-#include "tensorflow/lite/schema/schema_generated.h"
+#include "tensorflow/lite/micro/schema/schema_generated.h"
 #include "model_metadata.h"
 #include "golden_input.h"
 #include "mfcc.h"
+
+#define TENSOR_ARENA_SIZE (256*1024)
+
+static uint8_t *arena = nullptr;
 extern const unsigned char command_model[];
-alignas(16) static unsigned char arena[256*1024];
+// alignas(16) static unsigned char arena[TENSOR_ARENA_SIZE];
 static tflite::MicroInterpreter *engine;
+
 bool inference_init() {
     const auto *model=tflite::GetModel(command_model);
     if(model->version()!=TFLITE_SCHEMA_VERSION) return false;
@@ -18,8 +25,36 @@ bool inference_init() {
     if(ops.AddConv2D()!=kTfLiteOk || ops.AddMaxPool2D()!=kTfLiteOk ||
        ops.AddReshape()!=kTfLiteOk || ops.AddFullyConnected()!=kTfLiteOk ||
        ops.AddSoftmax()!=kTfLiteOk || ops.AddMean()!=kTfLiteOk) return false;
-    static tflite::MicroInterpreter interpreter(model,ops,arena,sizeof(arena));
-    engine=&interpreter;
+
+    // static tflite::MicroInterpreter interpreter(model,ops,arena,sizeof(arena));
+    // engine=&interpreter;
+
+    // Allocate tensor arena from external PSRAM
+    arena = static_cast<uint8_t*>(
+        heap_caps_aligned_alloc(
+            16,
+            TENSOR_ARENA_SIZE,
+            MALLOC_CAP_SPIRAM | MALLOC_CAP_8BIT
+        )
+    );
+
+    if (arena == nullptr) {
+        printf("ERROR: PSRAM tensor arena allocation failed\n");
+        return false;
+    }
+
+    printf("Tensor arena allocated: %u bytes\n",
+        (unsigned)TENSOR_ARENA_SIZE);
+
+    static tflite::MicroInterpreter interpreter(
+        model,
+        ops,
+        arena,
+        TENSOR_ARENA_SIZE
+    );
+
+    engine = &interpreter;
+
     if(engine->AllocateTensors()!=kTfLiteOk) return false;
     auto *in=engine->input(0), *out=engine->output(0);
     if(in->type!=kTfLiteInt8 || out->type!=kTfLiteInt8 ||
